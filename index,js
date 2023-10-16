@@ -1,2 +1,2 @@
-const Tarea = require('./Tareas');
+const Tarea = require('./tareas');
 
