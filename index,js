@@ -1,2 +1,0 @@
-const Tarea = require('./tareas');
-

@@ -1,7 +1,7 @@
-function Tarea(titulo, descripcion = '', vencimiento = null, dificultad = 'Facil'){
-    if(typeof titulo !== 'string' || titulo.length !== 0 || titulo.length > 100) {
+function Tarea(titulo, descripcion = '', vencimiento = null, dificultad = 'facil', estado = 'pendiente'){
+    if (typeof titulo !== 'string' || titulo.trim().length === 0 || titulo.trim().length > 100) {
         throw new Error('El título debe ser una cadena de hasta 100 caracteres.');
-    }
+      }
 
     if(typeof descripcion !== 'string' || descripcion.length > 500){
         throw new Error('La descripcion tiene que ser una cadena de hasta 500 caracteres');
@@ -17,11 +17,18 @@ function Tarea(titulo, descripcion = '', vencimiento = null, dificultad = 'Facil
         throw new Error('La dificultad solo puede ser una cadena con el texto facil, medio o dificil');
     }
 
+    const estadosValidos = ['pendiente', 'en curso', 'terminada', 'cancelada'];
+    if (typeof estado !== 'string') throw new Error('El estado tiene que ser de tipo string');
+    
+    if(!estadosValidos.includes(estado.toLowerCase())){
+        throw new Error('El estado solo puede tener el valor pendiente, en curso, terminada o cancelada');
+    }
+
     this.titulo = titulo;
     this.descripcion = descripcion;
-    this.estado = 'pendiente';
+    this.estado = estado;
     this.creacion = new Date();
-    this.ultimaEdificion = this.creacion;
+    this.ultimaEdicion = this.creacion;
     this.vencimiento = vencimiento;
     this.dificultad = dificultad.toLowerCase();
 }
