@@ -27,4 +27,17 @@ gestorDeTareas.prototype.buscarTareas = function(buscar){
     return tareasBuscadas;
 }
 
+gestorDeTareas.prototype.obtenerEmoji = function(dificultad){
+    switch(dificultad.toLowerCase()){
+        case "facil":
+            return "★☆☆";
+        case "medio":
+            return "★★☆";
+        case "dificil":
+            return "★★★";
+        default:
+            return "";
+    }
+}
+
 module.exports = gestorDeTareas;

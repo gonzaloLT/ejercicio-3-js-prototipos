@@ -54,4 +54,6 @@ Tarea.prototype.cambiarDificultad = function(dificultad){
     this.ultimaEdificion = new Date();
 }
 
+
+
 module.exports = Tarea;
