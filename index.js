@@ -29,26 +29,79 @@ while(continuar){
             switch (opcion2){
                case 1://Todas
                console.clear();
-               tareasFiltradas = gestordeTareas.listarTareas();
-               if(tareasFiltradas.length > 0){
+                tareasFiltradas = gestordeTareas.listarTareas();
+                if (tareasFiltradas.length > 0) {
                   console.log('Estas son todas tus tareas');
                   tareasFiltradas.forEach((tarea, index) => {
-                     dif = gestordeTareas.obtenerEmoji(tarea.dificultad);
-                     console.log(`[${index+1}] ${tarea.titulo} - Estado: ${tarea.estado} - Dificultad: ${dif}`);
-                  })
-                  det = readline.questionInt('Seleccione una tarea para ver sus detalles o 0 para volver al menu');
+                  dif = gestordeTareas.obtenerEmoji(tarea.dificultad);
+                  console.log(`[${index + 1}] ${tarea.titulo} - Estado: ${tarea.estado} - Dificultad: ${dif}`);});
+                  det = readline.questionInt('Seleccione una tarea para ver sus detalles o 0 para volver al menu: ');
                   det--;
-                  if(det >= 0 && det < tareasFiltradas.length){
+                  if (det >= 0 && det < tareasFiltradas.length) {
                      console.clear();
                      console.log('Detalles de la tarea: \n\n');
-                     dif = gestordeTareas.obtenerEmoji(tareasFiltradas[det].dificultad)
+                     dif = gestordeTareas.obtenerEmoji(tareasFiltradas[det].dificultad);
                      console.log(`Titulo: ${tareasFiltradas[det].titulo} \nDescripcion: ${tareasFiltradas[det].descripcion} \nEstado: ${tareasFiltradas[det].estado} \nFecha de creacion: ${tareasFiltradas[det].creacion ? tareasFiltradas[det].creacion.toLocaleDateString() : 'Null'} \nFecha ultima edicion: ${tareasFiltradas[det].ultimaEdicion ? tareasFiltradas[det].ultimaEdicion.toLocaleDateString() : 'Null'} \nFecha de vencimiento: ${tareasFiltradas[det].vencimiento ? tareasFiltradas[det].vencimiento.toLocaleDateString() : 'Null'} \nDificultad: ${dif}`);
+
+                     const editar = readline.question('Desea editar esta tarea? (S/N): ');
+                     if (editar.toUpperCase() === 'S') {
+                        const tareaAEditar = tareasFiltradas[det];
+                        console.clear();
+                        console.log('Proporcione la nueva información para la tarea:');
+                        const nuevaInformacion = {
+                           descripcion: readline.question('Nueva descripcion (presiona enter para mantener la actual): ') || tareaAEditar.descripcion,
+                           dificultad: readline.question('Nueva dificultad ([1] facil / [2] medio / [3] dificil): ') || tareaAEditar.dificultad,
+                           estado: readline.question('Nuevo estado ([1] pendiente / [2] en curso / [3] terminada / [4] cancelada): ') || tareaAEditar.estado,
+                           vencimiento: readline.question('Nueva fecha de vencimiento (YYYY-MM-DD o enter para mantener la actual): ') || tareaAEditar.vencimiento,
+                        };
+
+                        // Validar y ajustar fecha de vencimiento
+                        nuevaInformacion.vencimiento = gestordeTareas.validarFecha(nuevaInformacion.vencimiento) || tareaAEditar.vencimiento;
+                       // Validar y ajustar dificultad
+                        switch (nuevaInformacion.dificultad) {
+                           case '1':
+                              nuevaInformacion.dificultad = 'facil';
+                           break;
+                           case '2':
+                              nuevaInformacion.dificultad = 'medio';
+                           break;
+                           case '3':
+                              nuevaInformacion.dificultad = 'dificil';
+                           break;
+                           default:
+                              console.log('Opción de dificultad no válida. Manteniendo la actual.');
+                              nuevaInformacion.dificultad = tareaAEditar.dificultad;
+                           break;
+                        }
+
+                        // Validar y ajustar estado
+                        switch (nuevaInformacion.estado) {
+                           case '1':
+                              nuevaInformacion.estado = 'pendiente';
+                           break;
+                           case '2':
+                              nuevaInformacion.estado = 'en curso';
+                           break;
+                           case '3':
+                              nuevaInformacion.estado = 'terminada';
+                           break;
+                           case '4':
+                              nuevaInformacion.estado = 'cancelada';
+                           break;
+                           default:
+                              console.log('Opción de estado no válida. Manteniendo el actual.');
+                              nuevaInformacion.estado = tareaAEditar.estado;
+                           break;
+                        }
+
+                        gestordeTareas.editarTarea(det, nuevaInformacion);
+                     }
                   }
                } else {
                   console.log("No tienes tareas agregadas");
                }
-               seguir = readline.question('Presione enter para continuar...');
-                  break;
+                  seguir = readline.question('Presione enter para continuar...');
+               break;
                case 2://Pendientes
                console.clear();
                tareasFiltradas = gestordeTareas.listarTareasPorEstado('pendiente');

@@ -27,6 +27,27 @@ gestorDeTareas.prototype.buscarTareas = function(buscar){
     return tareasBuscadas;
 }
 
+gestorDeTareas.prototype.editarTarea = function (indice, nuevaInformacion) {
+    if (indice >= 0 && indice < this.tareas.length) {
+        const tareaAEditar = this.tareas[indice];
+
+        tareaAEditar.descripcion = nuevaInformacion.descripcion || tareaAEditar.descripcion;
+        tareaAEditar.vencimiento = nuevaInformacion.vencimiento || tareaAEditar.vencimiento;
+        tareaAEditar.dificultad = nuevaInformacion.dificultad || tareaAEditar.dificultad;
+        tareaAEditar.estado = nuevaInformacion.estado || tareaAEditar.estado;
+        tareaAEditar.ultimaEdicion = new Date();
+
+        console.log('Tarea editada exitosamente.');
+    } else {
+        console.log('Índice de tarea no válido.');
+    }
+};
+
+gestorDeTareas.prototype.validarFecha = function (fecha) {
+    const fechaValida = new Date(fecha);
+    return !isNaN(fechaValida.getTime()) ? fechaValida : null;
+}
+
 gestorDeTareas.prototype.obtenerEmoji = function(dificultad){
     switch(dificultad.toLowerCase()){
         case "facil":
